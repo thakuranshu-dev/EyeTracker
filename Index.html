@@ -1,0 +1,108 @@
+<!-- Let's create two eyes with pupil movement using JavaScript.  -->
+<!-- The pupil will react (e.i., follow the mouse movement) with the movement of the mouse pointer.  -->
+
+<!-- HTML: -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eye Tracker</title>
+    <!-- CSS: -->
+    <style>
+        body{
+        /* background-color: aquamarine; */
+        background-color: black;
+        }
+        .eyes-container {
+        display: flex;
+        justify-content: center;
+        margin-top:10%;
+        }
+
+        .eye {
+        width: 100px;
+        height: 100px;
+        background-color: black;
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+        margin: 10px;
+        }
+
+        .iris {
+        width: 80px;
+        height: 80px;
+        background-color: purple;
+        background: radial-gradient(white, purple);
+        border-radius: 50%;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        transition: transform 0.3s ease-in-out;
+        }
+
+        .pupil {
+        width: 40px;
+        height: 40px;
+        background-color: black;
+        border-radius: 50%;
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="eyes-container" id="eyes-container">
+        <div class="eye">
+            <div class="iris"></div>
+            <div class="pupil"></div>
+        </div>
+        <div class="eye">
+            <div class="iris"></div>
+            <div class="pupil"></div>
+        </div>
+    </div>
+        
+    <!-- JavaScript: -->
+    <script>
+        const irises = document.querySelectorAll(".iris");
+        const pupils = document.querySelectorAll(".pupil");
+
+        function movePupil(event) {
+            // Get the x and y coordinates of the mouse pointer relative to the viewport.
+            const x = event.clientX; 
+            const y = event.clientY;
+
+            pupils.forEach((pupil, index) => {
+                // Get the size of an element and its position relative to the viewport. 
+                const eyeRect = pupil.parentElement.getBoundingClientRect();
+
+                // The center of the eye is calculated by adding half of the eye's width and height to its top-left corner coordinates.
+                const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+                const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+
+                const deltaX = x - eyeCenterX;
+                const deltaY = y - eyeCenterY;
+
+                // The angle from the center of the eye to the mouse pointer
+                const angle = Math.atan2(deltaY, deltaX);
+
+                // The distancefrom the center of the eye to the mouse pointer is calculated using the Pythagorean theorem and limited to a maximum of 20 pixels.
+                const distance = Math.min(Math.hypot(deltaX, deltaY), 20);
+
+                // Calculate the translation values (translateX and translateY) for the pupil based on the angle and the limited distance. These values determine how far and in which direction the pupil should move.
+                const translateX = Math.cos(angle) * distance;
+                const translateY = Math.sin(angle) * distance;
+
+                // Apply a CSS transform to the pupil element to move it to the calculated position.
+                pupil.style.transform = `translate(${translateX}px, ${translateY}px)`;
+            });
+        }
+
+        document.addEventListener("mousemove", movePupil);
+    </script>
+</body>
+</html>

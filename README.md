@@ -23,3 +23,7 @@ The EyeTracker project is a web-based application where the pupils of eyes on th
 1. Clone the repository:
    ```bash
    git clone https://github.com/thakuranshu-dev/EyeTracker.git
+
+## License
+
+This repository is currently unlicensed.
